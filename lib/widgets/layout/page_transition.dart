@@ -13,18 +13,11 @@ class AppPageTransitionBuilder<T> extends PageRouteBuilder<T> {
           pageBuilder: (context, animation, secondaryAnimation) =>
               builder(context),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            const begin = Offset(0.0, 1.0);
-            const end = Offset.zero;
-            const curve = Curves.ease;
-
-            final tween = Tween(begin: begin, end: end);
-            final curvedAnimation = CurvedAnimation(
-              parent: animation,
-              curve: curve,
-            );
-
-            return SlideTransition(
-              position: tween.animate(curvedAnimation),
+            var curve = Curves.ease;
+            var tween =
+                Tween(begin: 0.0, end: 1.0).chain(CurveTween(curve: curve));
+            return FadeTransition(
+              opacity: animation.drive(tween),
               child: child,
             );
           },
