@@ -11,13 +11,15 @@ class LaunchModel {
   }
 
   factory LaunchModel.fromJson(Map<String, dynamic> json) {
-    var dateLocal = DateTime.tryParse(json['static_fire_date_utc'])?.toLocal();
+    var fireDate = json['static_fire_date_utc'];
+    var dateLocal = fireDate != null
+        ? DateTime.parse(json['static_fire_date_utc']).toLocal()
+        : null;
     var links =
         json['links'] != null ? LinksModel.fromJson(json['links']) : null;
-
     return LaunchModel(
         links: links,
-        id: json['id'],
+        id: json['id'] ?? 'null',
         details: json['details'] ?? 'null',
         name: json['name'] ?? 'null',
         dateLocal: dateLocal,
@@ -69,7 +71,8 @@ class FlickrModel {
 
   factory FlickrModel.fromJson(Map<String, dynamic> json) {
     return FlickrModel(
-        original: json['original'] ?? [], small: json['small'] ?? []);
+        original: List<String>.from(json['original'] ?? []),
+        small: List<String>.from(json['small'] ?? []));
   }
 
   FlickrModel({required this.original, required this.small});

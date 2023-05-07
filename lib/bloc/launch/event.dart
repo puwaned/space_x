@@ -7,6 +7,16 @@ abstract class LaunchEvent extends Equatable {
 }
 
 class LoadLaunchEvent extends LaunchEvent {
+
   @override
   List<Object?> get props => [];
+}
+
+class SearchLaunchEvent extends LaunchEvent {
+  final String search;
+
+  const SearchLaunchEvent(this.search);
+
+  @override
+  List<Object?> get props => [search];
 }

@@ -11,11 +11,23 @@ class LaunchBloc extends Bloc<LaunchEvent, LaunchState> {
     on<LoadLaunchEvent>((event, emit) async {
       emit(LaunchLoadingState());
       try {
-        final list = await _repo.getAll();
+        final list = await _repo.getAll(page: 1);
         emit(LaunchLoadedState(list));
       } catch (err) {
         emit(LaunchErrorState(err.toString()));
       }
     });
+
+    on<SearchLaunchEvent>(
+      (event, emit) async {
+        emit(LaunchLoadingState());
+        try {
+          var list = await _repo.getAll(page: 1, search: event.search);
+          emit(LaunchLoadedState(list, event.search));
+        } catch (err) {
+          emit(LaunchErrorState(err.toString(), event.search));
+        }
+      },
+    );
   }
 }

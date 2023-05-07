@@ -13,18 +13,20 @@ class LaunchLoadingState extends LaunchState {
 
 class LaunchLoadedState extends LaunchState {
   final PaginationModel<LaunchModel> data;
+  final String? search;
 
-  LaunchLoadedState(this.data);
+  LaunchLoadedState(this.data, [this.search]);
 
   @override
-  List<Object?> get props => [data];
+  List<Object?> get props => [data, search];
 }
 
 class LaunchErrorState extends LaunchState {
   final String error;
+  final String? search;
 
-  LaunchErrorState(this.error);
+  LaunchErrorState(this.error, [this.search]);
 
   @override
-  List<Object?> get props => [error];
+  List<Object?> get props => [error, search];
 }

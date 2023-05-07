@@ -5,7 +5,7 @@ class PaginationModel<T> {
   final int page;
   final bool hasPrevPage;
   final bool hasNextPage;
-  final int nextPage;
+  final int? nextPage;
 
   factory PaginationModel.fromJson(Map<String, dynamic> json, List<T> docs) {
     return PaginationModel(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:spacex/routes/page.dart';
 import 'package:spacex/routes/path.dart';
+import 'package:spacex/widgets/layout/loading.dart';
 import 'package:spacex/widgets/layout/page_transition.dart';
 
 class RootApp extends StatelessWidget {
@@ -16,7 +17,7 @@ class RootApp extends StatelessWidget {
       theme: ThemeData(),
       builder: (context, child) {
         //
-        return child!;
+        return AppLoadingScreen(child: child!);
       },
       initialRoute: AppPaths.splash,
       onGenerateRoute: (settings) {

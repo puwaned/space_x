@@ -3,12 +3,21 @@ import 'package:spacex/environment.dart';
 import 'package:spacex/model/launch_model.dart';
 import 'package:spacex/model/share_model.dart';
 
+const int limit = 20;
+
 class LaunchRepository {
   Dio dio = Dio(BaseOptions(
       validateStatus: (_) => true, responseType: ResponseType.json));
 
-  Future<PaginationModel<LaunchModel>> getAll() async {
-    var res = await dio.post('${AppEnvironment.baseUrl}/v5/launches/query');
+  Future<PaginationModel<LaunchModel>> getAll(
+      {required int page, String? search}) async {
+    var res =
+        await dio.post('${AppEnvironment.baseUrl}/v5/launches/query', data: {
+      "options": {'limit': limit, 'page': page},
+      "query": {
+        "name": {"\$regex": search ?? "", "\$options": "i"}
+      },
+    });
     if (res.statusCode == 200) {
       var docs = LaunchModel.parseList(res.data['docs']);
       return PaginationModel<LaunchModel>.fromJson(res.data, docs);
