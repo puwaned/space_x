@@ -29,5 +29,17 @@ class LaunchBloc extends Bloc<LaunchEvent, LaunchState> {
         }
       },
     );
+
+    on<LoadMoreLaunchEvent>((event, emit) async {
+      // emit(LaunchLoadMoreState(event.));
+      try {
+        var list = await _repo.getAll(page: event.page);
+        var docs = [...event.prevDocs, ...list.docs];
+        list.docs = docs;
+        emit(LaunchLoadedState(list));
+      } catch (err) {
+        print(err);
+      }
+    });
   }
 }

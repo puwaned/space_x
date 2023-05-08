@@ -30,3 +30,13 @@ class LaunchErrorState extends LaunchState {
   @override
   List<Object?> get props => [error, search];
 }
+
+
+class LaunchLoadMoreState extends LaunchState {
+  final bool loading;
+
+  LaunchLoadMoreState(this.loading);
+
+  @override
+  List<Object?> get props => [loading];
+}

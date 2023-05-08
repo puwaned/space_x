@@ -1,5 +1,5 @@
 class PaginationModel<T> {
-  final List<T> docs;
+  List<T> docs;
   final int totalDocs;
   final int limit;
   final int page;
@@ -10,8 +10,8 @@ class PaginationModel<T> {
   factory PaginationModel.fromJson(Map<String, dynamic> json, List<T> docs) {
     return PaginationModel(
         docs: docs,
-        hasNextPage: json['hasNextPage'],
-        hasPrevPage: json['hasPrevPage'],
+        hasNextPage: json['hasNextPage'] ?? false,
+        hasPrevPage: json['hasPrevPage'] ?? false,
         limit: json['limit'],
         nextPage: json['nextPage'],
         page: json['page'],

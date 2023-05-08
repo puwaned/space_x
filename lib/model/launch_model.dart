@@ -2,17 +2,17 @@ class LaunchModel {
   final String id;
   final LinksModel? links;
   final String details;
-  final bool success;
+  final bool? success;
   final String name;
-  final DateTime? dateLocal;
+  final DateTime? fireDate;
 
   static List<LaunchModel> parseList(List<dynamic> list) {
     return list.map((e) => LaunchModel.fromJson(e)).toList();
   }
 
   factory LaunchModel.fromJson(Map<String, dynamic> json) {
-    var fireDate = json['static_fire_date_utc'];
-    var dateLocal = fireDate != null
+    var _fireDate = json['static_fire_date_utc'];
+    var fireDate = _fireDate != null
         ? DateTime.parse(json['static_fire_date_utc']).toLocal()
         : null;
     var links =
@@ -22,7 +22,7 @@ class LaunchModel {
         id: json['id'] ?? 'null',
         details: json['details'] ?? 'null',
         name: json['name'] ?? 'null',
-        dateLocal: dateLocal,
+        fireDate: fireDate,
         success: json['success']);
   }
 
@@ -31,7 +31,7 @@ class LaunchModel {
       required this.id,
       required this.details,
       required this.name,
-      required this.dateLocal,
+      required this.fireDate,
       required this.success});
 }
 

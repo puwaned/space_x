@@ -3,7 +3,7 @@ import 'package:spacex/environment.dart';
 import 'package:spacex/model/launch_model.dart';
 import 'package:spacex/model/share_model.dart';
 
-const int limit = 20;
+const int limit = 30;
 
 class LaunchRepository {
   Dio dio = Dio(BaseOptions(

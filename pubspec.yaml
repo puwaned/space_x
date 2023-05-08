@@ -20,6 +20,12 @@ dependencies:
   flutter_bloc: ^8.1.2
   equatable: ^2.0.5
   dio: ^5.1.1
+  responsive_framework: ^1.0.0
+  google_fonts: ^4.0.4
+  anim_search_bar: ^2.0.3
+  chips_choice: ^3.0.0
+  cached_network_image: ^3.2.3
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:
@@ -28,3 +34,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/images/
