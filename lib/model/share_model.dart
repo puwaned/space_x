@@ -27,3 +27,10 @@ class PaginationModel<T> {
       required this.page,
       required this.totalDocs});
 }
+
+class LaunchDetailScreenArguments {
+  final String name;
+  final String id;
+
+  LaunchDetailScreenArguments({required this.name, required this.id});
+}

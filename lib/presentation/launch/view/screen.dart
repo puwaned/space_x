@@ -4,17 +4,17 @@ import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spacex/launch/bloc/bloc.dart';
-import 'package:spacex/launch/bloc/event.dart';
-import 'package:spacex/launch/cubit/cubit.dart';
+import 'package:spacex/presentation/launch/bloc/bloc.dart';
+import 'package:spacex/presentation/launch/bloc/event.dart';
+import 'package:spacex/presentation/launch/cubit/cubit.dart';
 import 'package:spacex/model/launch_model.dart';
 
 import '../bloc/state.dart';
 import 'drawer.dart';
 import 'launch_list.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class LaunchScreen extends StatefulWidget {
+  const LaunchScreen({super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -22,7 +22,7 @@ class HomeScreen extends StatefulWidget {
   }
 }
 
-class _State extends State<HomeScreen> {
+class _State extends State<LaunchScreen> {
   late final TextEditingController _searchController;
   Timer? _timer;
 

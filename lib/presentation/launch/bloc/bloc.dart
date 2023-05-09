@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spacex/launch/bloc/event.dart';
-import 'package:spacex/launch/bloc/state.dart';
+import 'package:spacex/presentation/launch/bloc/event.dart';
+import 'package:spacex/presentation/launch/bloc/state.dart';
 
-import '../../repo/launch_repo.dart';
+import '../../../repo/launch_repo.dart';
 
 class LaunchBloc extends Bloc<LaunchEvent, LaunchState> {
   final LaunchRepository _repo;

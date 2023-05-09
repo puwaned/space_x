@@ -23,7 +23,7 @@ class _State extends State<SplashScreen> {
   void _redirect() async {
     await Future.delayed(const Duration(seconds: 1));
     if (context.mounted) {
-      Navigator.of(context).pushReplacementNamed(AppPaths.home);
+      Navigator.of(context).pushReplacementNamed(AppPaths.launch);
     }
   }
 

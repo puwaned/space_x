@@ -11,7 +11,7 @@ class LaunchFilter {
 class LaunchModel {
   final String id;
   final LinksModel? links;
-  final String details;
+  final String? details;
   final bool? success;
   final String name;
   final DateTime? fireDate;
@@ -30,7 +30,7 @@ class LaunchModel {
     return LaunchModel(
         links: links,
         id: json['id'] ?? 'null',
-        details: json['details'] ?? 'null',
+        details: json['details'],
         name: json['name'] ?? 'null',
         fireDate: fireDate,
         success: json['success']);

@@ -1,7 +1,8 @@
 import 'package:intl/intl.dart';
 
-extension DateExtension on DateTime {
+extension DateExtension on DateTime? {
   String format([String format = 'd MMM yyyy']) {
-    return DateFormat(format).format(this);
+    if (this == null) return '-';
+    return DateFormat(format).format(this!);
   }
 }

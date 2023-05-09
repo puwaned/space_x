@@ -2,13 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spacex/launch/bloc/bloc.dart';
-import 'package:spacex/launch/bloc/event.dart';
-import 'package:spacex/launch/bloc/state.dart';
-import 'package:spacex/launch/cubit/cubit.dart';
+import 'package:spacex/presentation/launch/bloc/bloc.dart';
+import 'package:spacex/presentation/launch/bloc/event.dart';
+import 'package:spacex/presentation/launch/cubit/cubit.dart';
 import 'package:spacex/model/launch_model.dart';
 import 'package:spacex/model/share_model.dart';
 import 'package:spacex/extension/date.dart';
+import 'package:spacex/routes/path.dart';
 
 class LaunchList extends StatefulWidget {
   final PaginationModel<LaunchModel> launch;
@@ -59,7 +59,7 @@ class _State extends State<LaunchList> {
   @override
   Widget build(BuildContext context) {
     var list = launch.docs;
-    var state = context.read<LaunchBloc>().state;
+
     return ListView.separated(
         controller: _controller,
         itemBuilder: (context, index) {
@@ -84,7 +84,6 @@ class _State extends State<LaunchList> {
           return LaunchRocketCard(
             item: item,
           );
-
         },
         separatorBuilder: (context, index) {
           return SizedBox(
@@ -143,111 +142,116 @@ class LaunchRocketCard extends StatelessWidget {
     var coverImage = imageList.isEmpty ? '' : imageList.first;
     var fireDate = item.fireDate != null ? item.fireDate!.format() : '-';
 
-    return Container(
-      clipBehavior: Clip.hardEdge,
-      height: 300,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10), color: Colors.white),
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          CachedNetworkImage(
-            fit: BoxFit.cover,
-            imageUrl: coverImage,
-            errorWidget: (context, str, _) {
-              return Container(
-                color: Colors.black26,
-                child: const Center(
-                  child: Text('No image.'),
-                ),
-              );
-            },
-          ),
-          Container(
-              decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                      colors: [
-                Colors.black54,
-                Colors.transparent,
-                Colors.transparent,
-              ]))),
-          Positioned(
-            top: 10,
-            left: 10,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  item.name,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 14),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  children: [
-                    const Text(
-                      'Launch status : ',
-                      style: TextStyle(fontSize: 12),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(1),
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Container(
-                        height: 11,
-                        width: 11,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: _getDotColor(item.success)),
-                      ),
-                    )
-                  ],
-                )
-              ],
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(context, AppPaths.launchDetail, arguments: item);
+      },
+      child: Container(
+        clipBehavior: Clip.hardEdge,
+        height: 300,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10), color: Colors.white),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            CachedNetworkImage(
+              fit: BoxFit.cover,
+              imageUrl: coverImage,
+              errorWidget: (context, str, _) {
+                return Container(
+                  color: Colors.black26,
+                  child: const Center(
+                    child: Text('No image.'),
+                  ),
+                );
+              },
             ),
-          ),
-          // Positioned(
-          //     top: 10,
-          //     right: 10,
-          //     child: ,
-          Positioned(
-              bottom: 10,
+            Container(
+                decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [
+                  Colors.black54,
+                  Colors.transparent,
+                  Colors.transparent,
+                ]))),
+            Positioned(
+              top: 10,
               left: 10,
-              right: 10,
-              child: Container(
-                height: 60,
-                decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.3),
-                    borderRadius: BorderRadius.circular(10)),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.name,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
                     children: [
                       const Text(
-                        'Rocket launch date',
-                        style: TextStyle(fontSize: 10),
+                        'Launch status : ',
+                        style: TextStyle(fontSize: 12),
                       ),
-                      Text(
-                        fireDate,
-                        style: TextStyle(fontSize: 16),
+                      Container(
+                        padding: const EdgeInsets.all(1),
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Container(
+                          height: 11,
+                          width: 11,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: _getDotColor(item.success)),
+                        ),
                       )
                     ],
+                  )
+                ],
+              ),
+            ),
+            // Positioned(
+            //     top: 10,
+            //     right: 10,
+            //     child: ,
+            Positioned(
+                bottom: 10,
+                left: 10,
+                right: 10,
+                child: Container(
+                  height: 60,
+                  decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Rocket launch date',
+                          style: TextStyle(fontSize: 10),
+                        ),
+                        Text(
+                          fireDate,
+                          style: TextStyle(fontSize: 16),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                // child: Row(
-                //   children: [
-                //     Expanded(flex: 1, child: ),
-                //     Expanded(flex: 1, child: Container()),
-                //   ],
-                // ),
-              ))
-        ],
+                  // child: Row(
+                  //   children: [
+                  //     Expanded(flex: 1, child: ),
+                  //     Expanded(flex: 1, child: Container()),
+                  //   ],
+                  // ),
+                ))
+          ],
+        ),
       ),
     );
   }
