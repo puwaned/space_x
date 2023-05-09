@@ -28,10 +28,7 @@ class HomeDrawer extends StatelessWidget {
                 ChipsChoice<int>.single(
                   value: state.sortName,
                   onChanged: (val) {
-                    var next = LaunchFilter(
-                        page: 1,
-                        sortFireDate: state.sortFireDate,
-                        sortName: val);
+                    var next = state.copyWith(page: 1, sortName: val);
                     context.read<LaunchCubit>().change(next);
                     context.read<LaunchBloc>().add(LoadLaunchEvent(next));
                   },
@@ -58,8 +55,7 @@ class HomeDrawer extends StatelessWidget {
                 ChipsChoice<int>.single(
                   value: state.sortFireDate,
                   onChanged: (val) {
-                    var next = LaunchFilter(
-                        page: 1, sortFireDate: val, sortName: state.sortName);
+                    var next = state.copyWith(page: 1, sortFireDate: val);
                     context.read<LaunchCubit>().change(next);
                     context.read<LaunchBloc>().add(LoadLaunchEvent(next));
                   },

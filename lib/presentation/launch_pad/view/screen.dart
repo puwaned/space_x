@@ -12,8 +12,28 @@ class LaunchPadScreen extends StatefulWidget {
 class _State extends State<LaunchPadScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text('xxxx'),
+    var id = ModalRoute.of(context)?.settings.arguments as String;
+
+    return Scaffold(
+      backgroundColor: const Color(0xFF01051A),
+      appBar: AppBar(
+        title: const Text('Launch pad detail'),
+        backgroundColor: const Color(0xFF01051A),
+      ),
+      body: LaunchPadBody(
+        id: id,
+      ),
     );
+  }
+}
+
+class LaunchPadBody extends StatelessWidget {
+  final String id;
+
+  const LaunchPadBody({super.key, required this.id});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }

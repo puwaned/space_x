@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:spacex/model/launch_model.dart';
 import 'package:spacex/extension/date.dart';
+import 'package:spacex/routes/path.dart';
 
 class LaunchDetailScreen extends StatefulWidget {
   const LaunchDetailScreen({super.key});
@@ -111,9 +112,12 @@ class _State extends State<LaunchDetailScreen> {
                       label: 'Launch pad',
                       onTap: args.launchPad != null
                           ? () {
-                              //
+                              Navigator.of(context).pushNamed(
+                                  AppPaths.launchPadDetail,
+                                  arguments: args.launchPad);
                             }
-                          : null),
+                          : null,
+                      unique: 'view_lunch_pad_${args.launchPad}'),
                   _buildWidgetRecord(
                       label: 'Rocket',
                       onTap: args.rocket != null
@@ -130,7 +134,10 @@ class _State extends State<LaunchDetailScreen> {
     );
   }
 
-  _buildTextRecord({required String label, String? value}) {
+  _buildTextRecord({
+    required String label,
+    String? value,
+  }) {
     return Column(
       children: [
         Divider(
@@ -151,7 +158,8 @@ class _State extends State<LaunchDetailScreen> {
     );
   }
 
-  _buildWidgetRecord({required String label, void Function()? onTap}) {
+  _buildWidgetRecord(
+      {required String label, void Function()? onTap, String? unique}) {
     return Column(
       children: [
         Divider(
