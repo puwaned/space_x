@@ -1,8 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spacex/bloc/launch/bloc.dart';
-import 'package:spacex/bloc/launch/event.dart';
+import 'package:spacex/launch/bloc/bloc.dart';
+import 'package:spacex/launch/bloc/event.dart';
+import 'package:spacex/launch/bloc/state.dart';
+import 'package:spacex/launch/cubit/cubit.dart';
 import 'package:spacex/model/launch_model.dart';
 import 'package:spacex/model/share_model.dart';
 import 'package:spacex/extension/date.dart';
@@ -26,13 +29,23 @@ class _State extends State<LaunchList> {
   @override
   void initState() {
     super.initState();
+    _initController();
+  }
+
+  _initController() {
+    var launchBloc = context.read<LaunchBloc>();
+    var launchCubit = context.read<LaunchCubit>();
     _controller = ScrollController()
       ..addListener(() {
         var fetchMoreArea = _controller.position.maxScrollExtent;
         if (_controller.position.pixels >= fetchMoreArea &&
             launch.nextPage != null) {
-          var launchBloc = context.read<LaunchBloc>();
-          launchBloc.add(LoadMoreLaunchEvent(launch.nextPage!, launch.docs));
+          var filter = LaunchFilter(
+              page: launchCubit.state.page + 1,
+              search: launchCubit.state.search,
+              sortName: launchCubit.state.sortName,
+              sortFireDate: launchCubit.state.sortFireDate);
+          launchBloc.add(LoadMoreLaunchEvent(filter, launch.docs));
         }
       });
   }
@@ -46,33 +59,66 @@ class _State extends State<LaunchList> {
   @override
   Widget build(BuildContext context) {
     var list = launch.docs;
-
-    return AnimatedList(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        initialItemCount: list.length,
-        itemBuilder: (context, index, animation) {
+    var state = context.read<LaunchBloc>().state;
+    return ListView.separated(
+        controller: _controller,
+        itemBuilder: (context, index) {
           var item = list[index];
-
-          return SlideTransition(
-            position: CurvedAnimation(
-              curve: Curves.easeOut,
-              parent: animation,
-            ).drive((Tween<Offset>(
-              begin: const Offset(1, 0),
-              end: const Offset(0, 0),
-            ))),
-            child: Column(
+          if (index == list.length - 1 && launch.nextPage != null) {
+            return Column(
               children: [
                 LaunchRocketCard(
                   item: item,
                 ),
-                const SizedBox(
-                  height: 10,
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                  child: CupertinoActivityIndicator(
+                    radius: 16,
+                    color: Colors.white,
+                  ),
                 )
               ],
-            ),
+            );
+          }
+
+          return LaunchRocketCard(
+            item: item,
           );
-        });
+
+        },
+        separatorBuilder: (context, index) {
+          return SizedBox(
+            height: 20,
+          );
+        },
+        itemCount: list.length);
+    // return AnimatedList(
+    //     controller: _controller,
+    //     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+    //     initialItemCount: list.length,
+    //     itemBuilder: (context, index, animation) {
+    //       var item = list[index];
+    //
+    //       return SlideTransition(
+    //         position: CurvedAnimation(
+    //           curve: Curves.easeOut,
+    //           parent: animation,
+    //         ).drive((Tween<Offset>(
+    //           begin: const Offset(1, 0),
+    //           end: const Offset(0, 0),
+    //         ))),
+    //         child: Column(
+    //           children: [
+    //             LaunchRocketCard(
+    //               item: item,
+    //             ),
+    //             const SizedBox(
+    //               height: 10,
+    //             )
+    //           ],
+    //         ),
+    //       );
+    //     });
   }
 }
 

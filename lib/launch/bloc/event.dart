@@ -8,25 +8,20 @@ abstract class LaunchEvent extends Equatable {
 }
 
 class LoadLaunchEvent extends LaunchEvent {
+  final LaunchFilter filter;
+
+  const LoadLaunchEvent(this.filter);
+
   @override
   List<Object?> get props => [];
 }
 
-class SearchLaunchEvent extends LaunchEvent {
-  final String search;
-
-  const SearchLaunchEvent(this.search);
-
-  @override
-  List<Object?> get props => [search];
-}
-
 class LoadMoreLaunchEvent extends LaunchEvent {
-  final int page;
+  final LaunchFilter filter;
   final List<LaunchModel> prevDocs;
 
-  const LoadMoreLaunchEvent(this.page, this.prevDocs);
+  const LoadMoreLaunchEvent(this.filter, this.prevDocs);
 
   @override
-  List<Object?> get props => [page, prevDocs];
+  List<Object?> get props => [filter, prevDocs];
 }

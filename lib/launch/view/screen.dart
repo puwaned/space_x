@@ -4,11 +4,13 @@ import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spacex/bloc/launch/bloc.dart';
-import 'package:spacex/bloc/launch/event.dart';
-import 'package:spacex/bloc/launch/state.dart';
-import 'package:spacex/screen/home/drawer.dart';
+import 'package:spacex/launch/bloc/bloc.dart';
+import 'package:spacex/launch/bloc/event.dart';
+import 'package:spacex/launch/cubit/cubit.dart';
+import 'package:spacex/model/launch_model.dart';
 
+import '../bloc/state.dart';
+import 'drawer.dart';
 import 'launch_list.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -24,14 +26,6 @@ class _State extends State<HomeScreen> {
   late final TextEditingController _searchController;
   Timer? _timer;
 
-  _onSearch(String value) {
-    _timer?.cancel();
-    _timer = Timer(const Duration(milliseconds: 500), () {
-      var launchBloc = context.read<LaunchBloc>();
-      launchBloc.add(SearchLaunchEvent(value));
-    });
-  }
-
   @override
   void initState() {
     super.initState();
@@ -41,17 +35,23 @@ class _State extends State<HomeScreen> {
 
   _initLaunch() {
     var launchBloc = context.read<LaunchBloc>();
-    launchBloc.add(LoadLaunchEvent());
+    var launchCubit = context.read<LaunchCubit>();
+    launchBloc.add(LoadLaunchEvent(LaunchFilter(page: launchCubit.state.page)));
   }
 
   _initSearchController() {
     var launchBloc = context.read<LaunchBloc>();
+    var launchCubit = context.read<LaunchCubit>();
     _searchController = TextEditingController()
       ..addListener(() {
         var text = _searchController.text;
         _timer?.cancel();
         _timer = Timer(const Duration(milliseconds: 500), () {
-          // launchBloc.add(SearchLaunchEvent(text));
+          launchBloc.add(LoadLaunchEvent(LaunchFilter(
+              page: launchCubit.state.page,
+              search: text,
+              sortName: launchCubit.state.sortName,
+              sortFireDate: launchCubit.state.sortFireDate)));
         });
       });
   }
@@ -76,6 +76,7 @@ class _State extends State<HomeScreen> {
           title: const Text('Space X'),
           actions: [
             AnimSearchBar(
+              autoFocus: true,
               width: 320,
               textController: _searchController,
               onSuffixTap: () {
@@ -110,13 +111,23 @@ class _State extends State<HomeScreen> {
         );
       }
       if (state is LaunchLoadedState) {
-        return LaunchList(
-          launch: state.data,
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: LaunchList(
+            launch: state.data,
+          ),
         );
       }
 
       return Container();
     }, listener: (context, state) {
+      if (state is LaunchLoadMoreErrorState) {
+        final snackBar = SnackBar(
+          content: Text(state.error),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        return;
+      }
       return;
     });
   }

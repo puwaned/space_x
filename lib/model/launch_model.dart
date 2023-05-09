@@ -1,3 +1,13 @@
+class LaunchFilter {
+  final int page;
+  String? search;
+  int? sortName;
+  int? sortFireDate;
+
+  LaunchFilter(
+      {required this.page, this.sortName, this.sortFireDate, this.search});
+}
+
 class LaunchModel {
   final String id;
   final LinksModel? links;
@@ -11,8 +21,8 @@ class LaunchModel {
   }
 
   factory LaunchModel.fromJson(Map<String, dynamic> json) {
-    var _fireDate = json['static_fire_date_utc'];
-    var fireDate = _fireDate != null
+    var fd = json['static_fire_date_utc'];
+    var fireDate = fd != null
         ? DateTime.parse(json['static_fire_date_utc']).toLocal()
         : null;
     var links =

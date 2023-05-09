@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:spacex/routes/path.dart';
-import 'package:spacex/screen/home/screen.dart';
-import 'package:spacex/screen/splash/screen.dart';
+import 'package:spacex/launch/view/screen.dart';
+import 'package:spacex/splash/screen.dart';
 
 class AppPages {
   AppPages._();
