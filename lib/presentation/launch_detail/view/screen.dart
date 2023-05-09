@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:spacex/model/launch_model.dart';
 import 'package:spacex/extension/date.dart';
@@ -20,12 +21,23 @@ class _State extends State<LaunchDetailScreen> {
   }
 
   _getLogo(String? url) {
-    if (url == null) return null;
+    if (url == null) return Container();
+
     return Align(
       alignment: Alignment.center,
       child: Padding(
-        padding: EdgeInsets.only(bottom: 20),
-        child: CachedNetworkImage(width: 100, imageUrl: url),
+        padding: const EdgeInsets.only(bottom: 20),
+        child: CachedNetworkImage(
+            width: 100,
+            height: 100,
+            placeholder: (context, str) {
+              return const Center(
+                child: CupertinoActivityIndicator(
+                  color: Colors.white,
+                ),
+              );
+            },
+            imageUrl: url),
       ),
     );
   }
@@ -69,6 +81,7 @@ class _State extends State<LaunchDetailScreen> {
               ),
               flexibleSpace: ImageCarousel(
                 images: args.links?.flickr?.original ?? [],
+                id: args.id,
               )),
           SliverToBoxAdapter(
             child: Padding(
@@ -87,13 +100,27 @@ class _State extends State<LaunchDetailScreen> {
                           fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  _buildRecord(label: 'Details', value: args.details),
-                  _buildRecord(
+                  _buildTextRecord(label: 'Details', value: args.details),
+                  _buildTextRecord(
                       label: 'Rocket launch date',
                       value: args.fireDate?.format()),
-                  _buildRecord(
+                  _buildTextRecord(
                       label: 'Launch status',
-                      value: _getLaunchStatus(args.success))
+                      value: _getLaunchStatus(args.success)),
+                  _buildWidgetRecord(
+                      label: 'Launch pad',
+                      onTap: args.launchPad != null
+                          ? () {
+                              //
+                            }
+                          : null),
+                  _buildWidgetRecord(
+                      label: 'Rocket',
+                      onTap: args.rocket != null
+                          ? () {
+                              //
+                            }
+                          : null),
                 ],
               ),
             ),
@@ -103,7 +130,7 @@ class _State extends State<LaunchDetailScreen> {
     );
   }
 
-  _buildRecord({required String label, String? value}) {
+  _buildTextRecord({required String label, String? value}) {
     return Column(
       children: [
         Divider(
@@ -114,10 +141,50 @@ class _State extends State<LaunchDetailScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(flex: 1, child: Text(label)),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             Expanded(flex: 2, child: Text(value ?? '-')),
+          ],
+        )
+      ],
+    );
+  }
+
+  _buildWidgetRecord({required String label, void Function()? onTap}) {
+    return Column(
+      children: [
+        Divider(
+          color: Colors.white.withOpacity(0.5),
+          height: 30,
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(flex: 1, child: Text(label)),
+            const SizedBox(
+              width: 10,
+            ),
+            Expanded(
+                flex: 2,
+                child: onTap != null
+                    ? Align(
+                        alignment: Alignment.centerLeft,
+                        child: SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(50),
+                            radius: 30,
+                            onTap: onTap,
+                            child: const Icon(
+                              Icons.remove_red_eye,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      )
+                    : const Text('-')),
           ],
         )
       ],
@@ -127,43 +194,58 @@ class _State extends State<LaunchDetailScreen> {
 
 class ImageCarousel extends StatelessWidget {
   final List<String> images;
+  final String id;
 
-  const ImageCarousel({super.key, required this.images});
+  const ImageCarousel({super.key, required this.images, required this.id});
 
   @override
   Widget build(BuildContext context) {
     if (images.isEmpty) {
-      return Stack(
-        fit: StackFit.expand,
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              color: Colors.grey,
-            ),
-          ),
-          Container(
-            decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                    colors: [
-                  Colors.black54,
-                  Colors.transparent,
-                  Colors.transparent,
-                ])),
-          ),
-          const Center(
-            child: Text('No image.'),
-          )
-        ],
-      );
+      return Hero(
+          tag: '${id}_preview_image',
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Container(
+                decoration: const BoxDecoration(
+                  color: Colors.grey,
+                ),
+              ),
+              Container(
+                decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [
+                      Colors.black54,
+                      Colors.transparent,
+                      Colors.transparent,
+                    ])),
+              ),
+              const Center(
+                child: DefaultTextStyle(
+                    style: TextStyle(), child: Text('No image.')),
+              )
+            ],
+          ));
     }
 
     return CarouselSlider(
-        items: images
-            .map((e) => CachedNetworkImage(
-                height: double.infinity, fit: BoxFit.cover, imageUrl: e))
-            .toList(),
+        items: images.asMap().entries.map((e) {
+          var index = e.key;
+          var value = e.value;
+
+          if (index == 0) {
+            return Hero(
+              tag: '${id}_preview_image',
+              child: CachedNetworkImage(
+                  height: double.infinity, fit: BoxFit.cover, imageUrl: value),
+            );
+          }
+
+          return CachedNetworkImage(
+              height: double.infinity, fit: BoxFit.cover, imageUrl: value);
+        }).toList(),
         options: CarouselOptions(
             height: double.infinity,
             viewportFraction: 0.9,

@@ -1,3 +1,4 @@
+
 class LaunchFilter {
   final int page;
   String? search;
@@ -6,6 +7,15 @@ class LaunchFilter {
 
   LaunchFilter(
       {required this.page, this.sortName, this.sortFireDate, this.search});
+
+  LaunchFilter copyWith(
+      {int? page, String? search, int? sortName, int? sortFireDate}) {
+    return LaunchFilter(
+        page: page ?? this.page,
+        search: search ?? this.search,
+        sortName: sortName ?? this.sortName,
+        sortFireDate: sortFireDate ?? this.sortFireDate);
+  }
 }
 
 class LaunchModel {
@@ -15,6 +25,9 @@ class LaunchModel {
   final bool? success;
   final String name;
   final DateTime? fireDate;
+  final List<String> crews;
+  final String? rocket;
+  final String? launchPad;
 
   static List<LaunchModel> parseList(List<dynamic> list) {
     return list.map((e) => LaunchModel.fromJson(e)).toList();
@@ -27,13 +40,18 @@ class LaunchModel {
         : null;
     var links =
         json['links'] != null ? LinksModel.fromJson(json['links']) : null;
+    var crews = json['crew'].map((e) => e['crew']!).toList();
+
     return LaunchModel(
         links: links,
         id: json['id'] ?? 'null',
         details: json['details'],
         name: json['name'] ?? 'null',
         fireDate: fireDate,
-        success: json['success']);
+        success: json['success'],
+        rocket: json['rocket'],
+        launchPad: json['launchpad'],
+        crews: List<String>.from(crews));
   }
 
   LaunchModel(
@@ -42,7 +60,10 @@ class LaunchModel {
       required this.details,
       required this.name,
       required this.fireDate,
-      required this.success});
+      required this.success,
+      required this.crews,
+      required this.launchPad,
+      required this.rocket});
 }
 
 class LinksModel {
@@ -64,12 +85,11 @@ class LinksModel {
 }
 
 class PatchModel {
-  final String small;
-  final String large;
+  final String? small;
+  final String? large;
 
   factory PatchModel.fromJson(Map<String, dynamic> json) {
-    return PatchModel(
-        small: json['small'] ?? 'null', large: json['large'] ?? 'null');
+    return PatchModel(small: json['small'], large: json['large']);
   }
 
   PatchModel({required this.small, required this.large});

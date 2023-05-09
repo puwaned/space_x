@@ -136,10 +136,25 @@ class LaunchRocketCard extends StatelessWidget {
     return Colors.red;
   }
 
+  _getImagePreview(List<String> images) {
+    if (images.isEmpty) {
+      return Container(
+        color: Colors.black26,
+        child: const Center(
+          child: DefaultTextStyle(style: TextStyle(), child: Text('No image.')),
+        ),
+      );
+    }
+
+    return CachedNetworkImage(
+      fit: BoxFit.cover,
+      imageUrl: images.first,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var imageList = item.links?.flickr?.original ?? [];
-    var coverImage = imageList.isEmpty ? '' : imageList.first;
     var fireDate = item.fireDate != null ? item.fireDate!.format() : '-';
 
     return InkWell(
@@ -154,17 +169,9 @@ class LaunchRocketCard extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            CachedNetworkImage(
-              fit: BoxFit.cover,
-              imageUrl: coverImage,
-              errorWidget: (context, str, _) {
-                return Container(
-                  color: Colors.black26,
-                  child: const Center(
-                    child: Text('No image.'),
-                  ),
-                );
-              },
+            Hero(
+              tag: '${item.id}_preview_image',
+              child: _getImagePreview(imageList),
             ),
             Container(
                 decoration: const BoxDecoration(

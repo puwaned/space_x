@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:spacex/presentation/launch/bloc/bloc.dart';
 import 'package:spacex/presentation/launch/cubit/cubit.dart';
+import 'package:spacex/repo/launch_pad_repo.dart';
 import 'package:spacex/repo/launch_repo.dart';
 import 'package:spacex/routes/page.dart';
 import 'package:spacex/routes/path.dart';
@@ -12,15 +13,17 @@ import 'package:spacex/widgets/layout/page_transition.dart';
 
 class RootApp extends StatelessWidget {
   final _navigatorKey = GlobalKey<NavigatorState>();
-  final launchRepo = LaunchRepository();
+  final LaunchRepository launchRepo;
+  final LaunchPadRepository launchPadRepo;
 
-  RootApp({super.key});
+  RootApp({super.key, required this.launchRepo, required this.launchPadRepo});
 
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
         providers: [
-          RepositoryProvider<LaunchRepository>(create: (ctx) => launchRepo)
+          RepositoryProvider<LaunchRepository>(create: (ctx) => launchRepo),
+          RepositoryProvider<LaunchPadRepository>(create: (ctx) => launchPadRepo)
         ],
         child: MultiBlocProvider(
             providers: [

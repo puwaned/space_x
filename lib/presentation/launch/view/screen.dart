@@ -7,7 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spacex/presentation/launch/bloc/bloc.dart';
 import 'package:spacex/presentation/launch/bloc/event.dart';
 import 'package:spacex/presentation/launch/cubit/cubit.dart';
-import 'package:spacex/model/launch_model.dart';
 
 import '../bloc/state.dart';
 import 'drawer.dart';
@@ -36,7 +35,7 @@ class _State extends State<LaunchScreen> {
   _initLaunch() {
     var launchBloc = context.read<LaunchBloc>();
     var launchCubit = context.read<LaunchCubit>();
-    launchBloc.add(LoadLaunchEvent(LaunchFilter(page: launchCubit.state.page)));
+    launchBloc.add(LoadLaunchEvent(launchCubit.state));
   }
 
   _initSearchController() {
@@ -47,11 +46,12 @@ class _State extends State<LaunchScreen> {
         var text = _searchController.text;
         _timer?.cancel();
         _timer = Timer(const Duration(milliseconds: 500), () {
-          launchBloc.add(LoadLaunchEvent(LaunchFilter(
-              page: launchCubit.state.page,
-              search: text,
-              sortName: launchCubit.state.sortName,
-              sortFireDate: launchCubit.state.sortFireDate)));
+          //prevent fetch when first open text_field
+          if (launchCubit.state.search == text) return;
+
+          var next = launchCubit.state.copyWith(page: 1, search: text);
+          launchCubit.change(next);
+          launchBloc.add(LoadLaunchEvent(next));
         });
       });
   }

@@ -6,12 +6,12 @@ import 'package:spacex/model/share_model.dart';
 const int limit = 20;
 
 class LaunchRepository {
-  Dio dio = Dio(BaseOptions(
-      validateStatus: (_) => true, responseType: ResponseType.json));
+  Dio dio;
+
+  LaunchRepository({required this.dio});
 
   Future<PaginationModel<LaunchModel>> getAll(LaunchFilter filter) async {
-    var res =
-        await dio.post('${AppEnvironment.baseUrl}/v5/launches/query', data: {
+    var res = await dio.post('/v5/launches/query', data: {
       "options": {
         'limit': limit,
         'page': filter.page,
