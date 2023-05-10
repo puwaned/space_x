@@ -30,8 +30,12 @@ class _State extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
+      backgroundColor: const Color(0xFF01051A),
       body: Center(
-        child: CupertinoActivityIndicator(),
+        child: Hero(
+          tag: 'splash_screen',
+          child: CupertinoActivityIndicator(color: Colors.white,),
+        ),
       ),
     );
   }

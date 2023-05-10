@@ -103,7 +103,11 @@ class _State extends State<LaunchScreen> {
     return BlocConsumer<LaunchBloc, LaunchState>(builder: (context, state) {
       if (state is LaunchLoadingState) {
         return const Center(
-          child: CupertinoActivityIndicator(color: Colors.white,),
+          child: Hero(
+              tag: 'splash_screen',
+              child: CupertinoActivityIndicator(
+                color: Colors.white,
+              )),
         );
       }
       if (state is LaunchErrorState) {
