@@ -11,5 +11,5 @@ class LoadLaunchPadEvent extends LaunchPadEvent {
   const LoadLaunchPadEvent(this.id);
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [id];
 }
