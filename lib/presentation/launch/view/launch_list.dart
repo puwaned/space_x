@@ -8,6 +8,7 @@ import 'package:spacex/presentation/launch/cubit/cubit.dart';
 import 'package:spacex/model/launch_model.dart';
 import 'package:spacex/model/share_model.dart';
 import 'package:spacex/extension/date.dart';
+import 'package:spacex/presentation/shared/flow_delegate.dart';
 import 'package:spacex/routes/path.dart';
 
 class LaunchList extends StatefulWidget {
@@ -123,8 +124,9 @@ class _State extends State<LaunchList> {
 
 class LaunchRocketCard extends StatelessWidget {
   final LaunchModel item;
+  final GlobalKey _backgroundImageKey = GlobalKey();
 
-  const LaunchRocketCard({super.key, required this.item});
+  LaunchRocketCard({super.key, required this.item});
 
   _getDotColor(bool? isSuccess) {
     if (isSuccess == null) {
@@ -136,7 +138,7 @@ class LaunchRocketCard extends StatelessWidget {
     return Colors.red;
   }
 
-  _getImagePreview(List<String> images) {
+  _getImagePreview(List<String> images, BuildContext context) {
     if (images.isEmpty) {
       return Container(
         color: Colors.black26,
@@ -146,9 +148,19 @@ class LaunchRocketCard extends StatelessWidget {
       );
     }
 
-    return CachedNetworkImage(
-      fit: BoxFit.cover,
-      imageUrl: images.first,
+    return Flow(
+      delegate: ParallaxFlowDelegate(
+        scrollable: Scrollable.of(context),
+        listItemContext: context,
+        backgroundImageKey: _backgroundImageKey,
+      ),
+      children: [
+        CachedNetworkImage(
+          key: _backgroundImageKey,
+          fit: BoxFit.fill,
+          imageUrl: images.first,
+        )
+      ],
     );
   }
 
@@ -163,7 +175,7 @@ class LaunchRocketCard extends StatelessWidget {
       },
       child: Container(
         clipBehavior: Clip.hardEdge,
-        height: 300,
+        height: 220,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10), color: Colors.white),
         child: Stack(
@@ -171,7 +183,7 @@ class LaunchRocketCard extends StatelessWidget {
           children: [
             Hero(
               tag: '${item.id}_preview_image',
-              child: _getImagePreview(imageList),
+              child: _getImagePreview(imageList, context),
             ),
             Container(
                 decoration: const BoxDecoration(
