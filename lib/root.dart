@@ -5,8 +5,10 @@ import 'package:responsive_framework/responsive_framework.dart';
 import 'package:spacex/presentation/launch/bloc/bloc.dart';
 import 'package:spacex/presentation/launch/cubit/cubit.dart';
 import 'package:spacex/presentation/launch_pad/bloc/bloc.dart';
+import 'package:spacex/presentation/rocket/bloc/bloc.dart';
 import 'package:spacex/repo/launch_pad_repo.dart';
 import 'package:spacex/repo/launch_repo.dart';
+import 'package:spacex/repo/rocket_repo.dart';
 import 'package:spacex/routes/page.dart';
 import 'package:spacex/routes/path.dart';
 import 'package:spacex/widgets/layout/loading.dart';
@@ -16,21 +18,30 @@ class RootApp extends StatelessWidget {
   final _navigatorKey = GlobalKey<NavigatorState>();
   final LaunchRepository launchRepo;
   final LaunchPadRepository launchPadRepo;
+  final RocketRepository rocketRepo;
 
-  RootApp({super.key, required this.launchRepo, required this.launchPadRepo});
+  RootApp(
+      {super.key,
+      required this.launchRepo,
+      required this.launchPadRepo,
+      required this.rocketRepo});
 
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
         providers: [
           RepositoryProvider<LaunchRepository>(create: (ctx) => launchRepo),
-          RepositoryProvider<LaunchPadRepository>(create: (ctx) => launchPadRepo)
+          RepositoryProvider<LaunchPadRepository>(
+              create: (ctx) => launchPadRepo),
+          RepositoryProvider<RocketRepository>(create: (ctx) => rocketRepo)
         ],
         child: MultiBlocProvider(
             providers: [
               BlocProvider<LaunchBloc>(create: (ctx) => LaunchBloc(launchRepo)),
               BlocProvider<LaunchCubit>(create: (ctx) => LaunchCubit()),
-              BlocProvider<LaunchPadBloc>(create: (ctx) => LaunchPadBloc(launchPadRepo))
+              BlocProvider<LaunchPadBloc>(
+                  create: (ctx) => LaunchPadBloc(launchPadRepo)),
+              BlocProvider<RocketBloc>(create: (ctx) => RocketBloc(rocketRepo))
             ],
             child: MaterialApp(
               navigatorKey: _navigatorKey,
