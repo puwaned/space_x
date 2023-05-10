@@ -78,6 +78,7 @@ class _State extends State<LaunchScreen> {
             AnimSearchBar(
               autoFocus: true,
               width: 320,
+              rtl: true,
               textController: _searchController,
               onSuffixTap: () {
                 //

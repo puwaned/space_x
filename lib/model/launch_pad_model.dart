@@ -4,8 +4,8 @@ class LaunchPadModel {
   final String region;
   final String fullName;
   final String locality;
-  final int latitude;
-  final int longitude;
+  final double latitude;
+  final double longitude;
   final int? launchAttempt;
   final int? launchSuccess;
   final String? details;

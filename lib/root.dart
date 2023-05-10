@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:spacex/presentation/launch/bloc/bloc.dart';
 import 'package:spacex/presentation/launch/cubit/cubit.dart';
+import 'package:spacex/presentation/launch_pad/bloc/bloc.dart';
 import 'package:spacex/repo/launch_pad_repo.dart';
 import 'package:spacex/repo/launch_repo.dart';
 import 'package:spacex/routes/page.dart';
@@ -28,7 +29,8 @@ class RootApp extends StatelessWidget {
         child: MultiBlocProvider(
             providers: [
               BlocProvider<LaunchBloc>(create: (ctx) => LaunchBloc(launchRepo)),
-              BlocProvider(create: (ctx) => LaunchCubit())
+              BlocProvider<LaunchCubit>(create: (ctx) => LaunchCubit()),
+              BlocProvider<LaunchPadBloc>(create: (ctx) => LaunchPadBloc(launchPadRepo))
             ],
             child: MaterialApp(
               navigatorKey: _navigatorKey,
