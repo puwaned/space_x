@@ -8,6 +8,14 @@ class RocketBloc extends Bloc<RocketEvent, RocketState> {
   final RocketRepository _repo;
 
   RocketBloc(this._repo) : super(RocketLoadingState()) {
-    //
+    on<LoadRocketEvent>((event, emit) async {
+      emit(RocketLoadingState());
+      try {
+        final data = await _repo.getOne(event.id);
+        emit(RocketLoadedState(data));
+      } catch (err) {
+        emit(RocketErrorState(err.toString()));
+      }
+    });
   }
 }

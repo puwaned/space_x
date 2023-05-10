@@ -5,6 +5,8 @@ import 'package:spacex/routes/path.dart';
 import 'package:spacex/presentation/launch/view/screen.dart';
 import 'package:spacex/splash/screen.dart';
 
+import '../presentation/rocket/view/screen.dart';
+
 class AppPages {
   AppPages._();
 
@@ -12,6 +14,7 @@ class AppPages {
         AppPaths.splash: (ctx) => SplashScreen(),
         AppPaths.launch: (ctx) => LaunchScreen(),
         AppPaths.launchDetail: (ctx) => LaunchDetailScreen(),
-        AppPaths.launchPadDetail: (ctx) => LaunchPadScreen()
+        AppPaths.launchPadDetail: (ctx) => LaunchPadScreen(),
+        AppPaths.rocketDetail: (ctx) => RocketDetailScreen()
       };
 }

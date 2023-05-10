@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spacex/presentation/launch_pad/bloc/bloc.dart';
 import 'package:spacex/presentation/launch_pad/bloc/event.dart';
 import 'package:spacex/presentation/launch_pad/bloc/state.dart';
-import 'package:spacex/presentation/launch_pad/view/gallery.dart';
+import 'package:spacex/presentation/shared/gallery.dart';
 
 import '../../../model/launch_pad_model.dart';
 
@@ -90,7 +90,7 @@ class LaunchPadDetail extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            LaunchPadImageGallery(
+            ImageGallery(
               images: data.images,
             ),
             const SizedBox(

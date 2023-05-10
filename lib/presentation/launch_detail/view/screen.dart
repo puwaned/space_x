@@ -122,7 +122,9 @@ class _State extends State<LaunchDetailScreen> {
                       label: 'Rocket',
                       onTap: args.rocket != null
                           ? () {
-                              //
+                              Navigator.of(context).pushNamed(
+                                  AppPaths.rocketDetail,
+                                  arguments: args.rocket);
                             }
                           : null),
                 ],

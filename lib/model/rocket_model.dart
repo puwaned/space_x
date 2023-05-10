@@ -2,11 +2,12 @@ class RocketModel {
   final String id;
   final List<String> images;
   final String name;
-  final int costPerLaunch;
+  final int? costPerLaunch;
   final String country;
   final String company;
   final String description;
   final String wikipedia;
+  final RocketLandingLeg landingLeg;
   final RocketMassModel mass;
   final RocketHeightModel height;
 
@@ -15,6 +16,7 @@ class RocketModel {
   factory RocketModel.fromJson(Map<String, dynamic> json) {
     var height = RocketHeightModel.fromJson(json['height']);
     var mass = RocketMassModel.fromJson(json['mass']);
+    var landingLeg = RocketLandingLeg.fromJson(json['landing_legs']);
     var payloadWeights =
         RocketPayloadWeightModel.parseList(json['payload_weights']);
 
@@ -22,6 +24,7 @@ class RocketModel {
         id: json['id'],
         height: height,
         mass: mass,
+        landingLeg: landingLeg,
         payloadWeights: payloadWeights,
         wikipedia: json['wikipedia'],
         images: List<String>.from(json['flickr_images'] ?? []),
@@ -42,6 +45,7 @@ class RocketModel {
       required this.country,
       required this.description,
       required this.height,
+      required this.landingLeg,
       required this.mass,
       required this.payloadWeights});
 }
@@ -52,7 +56,7 @@ class RocketHeightModel {
 
   factory RocketHeightModel.fromJson(Map<String, dynamic> json) {
     return RocketHeightModel(
-        feet: double.parse(json['feet']), meters: double.parse(json['meters']));
+        feet: json['feet'].toDouble(), meters: json['meters'].toDouble());
   }
 
   RocketHeightModel({required this.feet, required this.meters});
@@ -64,10 +68,21 @@ class RocketMassModel {
 
   factory RocketMassModel.fromJson(Map<String, dynamic> json) {
     return RocketMassModel(
-        kg: double.parse(json['kg']), lb: double.parse(json['lb']));
+        kg: json['kg'].toDouble(), lb: json['lb'].toDouble());
   }
 
   RocketMassModel({required this.kg, required this.lb});
+}
+
+class RocketLandingLeg {
+  final int number;
+  final String material;
+
+  factory RocketLandingLeg.fromJson(Map<String, dynamic> json) {
+    return RocketLandingLeg(material: json['material'], number: json['number']);
+  }
+
+  RocketLandingLeg({required this.material, required this.number});
 }
 
 class RocketPayloadWeightModel {
@@ -78,8 +93,8 @@ class RocketPayloadWeightModel {
 
   factory RocketPayloadWeightModel.fromJson(Map<String, dynamic> json) {
     return RocketPayloadWeightModel(
-        kg: double.parse(json['kg']),
-        lb: double.parse(json['lb']),
+        kg: json['kg'].toDouble(),
+        lb: json['lb'].toDouble(),
         name: json['name'],
         id: json['id']);
   }
