@@ -3,6 +3,7 @@ import 'package:spacex/model/launch_model.dart';
 import 'package:spacex/model/share_model.dart';
 import 'package:spacex/presentation/launch/bloc/event.dart';
 import 'package:spacex/presentation/launch/bloc/state.dart';
+import 'package:spacex/presentation/shared/http_status.dart';
 
 import '../../../repo/launch_repo.dart';
 
@@ -14,13 +15,13 @@ class LaunchBloc extends Bloc<LaunchEvent, LaunchState> {
 
   LaunchBloc(this._repo)
       : super(LaunchState(
-            status: LaunchStatus.initial,
+            status: HttpRequestStatus.initial,
             data: preData,
             filter: prefilter,
             error: "")) {
     on<LoadLaunchEvent>((event, emit) async {
       emit(LaunchState(
-          status: LaunchStatus.loading,
+          status: HttpRequestStatus.loading,
           filter: event.filter,
           data: preData,
           error: ""));
@@ -28,10 +29,12 @@ class LaunchBloc extends Bloc<LaunchEvent, LaunchState> {
       try {
         final data = await _repo.getAll(event.filter);
         emit(LaunchState(
-            status: LaunchStatus.success, data: data, filter: event.filter));
+            status: HttpRequestStatus.success,
+            data: data,
+            filter: event.filter));
       } catch (err) {
         emit(LaunchState(
-            status: LaunchStatus.failed,
+            status: HttpRequestStatus.failed,
             error: err.toString(),
             data: preData,
             filter: event.filter));
@@ -44,10 +47,12 @@ class LaunchBloc extends Bloc<LaunchEvent, LaunchState> {
         final data = await _repo.getAll(event.filter);
         data.docs = [...prev, ...data.docs];
         emit(LaunchState(
-            status: LaunchStatus.success, data: data, filter: event.filter));
+            status: HttpRequestStatus.success,
+            data: data,
+            filter: event.filter));
       } catch (err) {
         emit(LaunchState(
-            status: LaunchStatus.failed,
+            status: HttpRequestStatus.failed,
             error: err.toString(),
             data: preData,
             filter: event.filter));

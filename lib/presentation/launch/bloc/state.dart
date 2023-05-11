@@ -1,13 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:spacex/model/launch_model.dart';
 import 'package:spacex/model/share_model.dart';
-
-enum LaunchStatus { initial, loading, success, failed }
+import 'package:spacex/presentation/shared/http_status.dart';
 
 class LaunchState extends Equatable {
   final PaginationModel<LaunchModel> data;
   final LaunchFilter filter;
-  final LaunchStatus status;
+  final HttpRequestStatus status;
   final String error;
 
   const LaunchState(
@@ -17,7 +16,7 @@ class LaunchState extends Equatable {
       this.error = ""});
 
   LaunchState copyWith(
-      {LaunchStatus? status,
+      {HttpRequestStatus? status,
       LaunchFilter? filter,
       String? error,
       PaginationModel<LaunchModel>? data}) {

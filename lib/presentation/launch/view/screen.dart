@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spacex/presentation/launch/bloc/bloc.dart';
 import 'package:spacex/presentation/launch/bloc/event.dart';
 
+import '../../shared/http_status.dart';
 import '../bloc/state.dart';
 import 'drawer.dart';
 import 'launch_list.dart';
@@ -99,8 +100,8 @@ class _State extends State<LaunchScreen> {
   _body() {
     return BlocConsumer<LaunchBloc, LaunchState>(builder: (context, state) {
       switch (state.status) {
-        case LaunchStatus.loading:
-        case LaunchStatus.initial:
+        case HttpRequestStatus.loading:
+        case HttpRequestStatus.initial:
           return const Center(
             child: Hero(
                 tag: 'splash_screen',
@@ -108,14 +109,14 @@ class _State extends State<LaunchScreen> {
                   color: Colors.white,
                 )),
           );
-        case LaunchStatus.success:
+        case HttpRequestStatus.success:
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: LaunchList(
               launch: state.data,
             ),
           );
-        case LaunchStatus.failed:
+        case HttpRequestStatus.failed:
           return Center(
             child: Text(state.error),
           );
