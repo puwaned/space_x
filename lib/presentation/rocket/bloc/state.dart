@@ -1,32 +1,16 @@
-
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:spacex/model/rocket_model.dart';
 
-@immutable
-abstract class RocketState extends Equatable {
-  const RocketState();
-}
+import '../../shared/http_status.dart';
 
-class RocketLoadingState extends RocketState {
-  @override
-  List<Object?> get props => [];
-}
-
-class RocketLoadedState extends RocketState {
-  final RocketModel data;
-
-  const RocketLoadedState(this.data);
-
-  @override
-  List<Object?> get props => [data];
-}
-
-class RocketErrorState extends RocketState {
+class RocketState extends Equatable {
+  final RocketModel? data;
   final String error;
+  final HttpRequestStatus status;
 
-  const RocketErrorState(this.error);
+  const RocketState(
+      {this.data, this.status = HttpRequestStatus.initial, this.error = ""});
 
   @override
-  List<Object?> get props => [error];
+  List<Object?> get props => [data, error, status];
 }

@@ -7,6 +7,8 @@ import 'package:spacex/presentation/rocket/bloc/event.dart';
 import 'package:spacex/presentation/rocket/bloc/state.dart';
 import 'package:spacex/presentation/shared/gallery.dart';
 
+import '../../shared/http_status.dart';
+
 class RocketDetailScreen extends StatefulWidget {
   const RocketDetailScreen({super.key});
 
@@ -26,8 +28,7 @@ class _State extends State<RocketDetailScreen> {
   }
 
   _initLoadEvent() {
-    var id = ModalRoute.of(context)?.settings.arguments as String;
-    context.read<RocketBloc>().add(LoadRocketEvent(id));
+    context.read<RocketBloc>().add(const LoadRocketEvent());
   }
 
   @override
@@ -41,26 +42,23 @@ class _State extends State<RocketDetailScreen> {
         backgroundColor: const Color(0xFF01051A),
       ),
       body: BlocBuilder<RocketBloc, RocketState>(builder: (context, state) {
-        if (state is RocketLoadingState) {
-          return const Center(
-            child: CupertinoActivityIndicator(
-              color: Colors.white,
-            ),
-          );
+        switch (state.status) {
+          case HttpRequestStatus.initial:
+          case HttpRequestStatus.loading:
+            return const Center(
+              child: CupertinoActivityIndicator(
+                color: Colors.white,
+              ),
+            );
+          case HttpRequestStatus.success:
+            return RocketDetail(
+              data: state.data!,
+            );
+          case HttpRequestStatus.failed:
+            return Center(
+              child: Text(state.error),
+            );
         }
-        if (state is RocketErrorState) {
-          return Center(
-            child: Text(state.error),
-          );
-        }
-
-        if (state is RocketLoadedState) {
-          return RocketDetail(
-            data: state.data,
-          );
-        }
-
-        return Container();
       }),
     );
   }
@@ -89,7 +87,8 @@ class RocketDetail extends StatelessWidget {
             _buildTextRecord(label: 'Country', value: data.country),
             _buildTextRecord(label: 'Height', value: '${data.height.meters} m'),
             _buildTextRecord(label: 'Mass', value: '${data.mass.kg} kg'),
-            _buildTextRecord(label: 'Landing legs', value: '${data.landingLeg.number}'),
+            _buildTextRecord(
+                label: 'Landing legs', value: '${data.landingLeg.number}'),
             _buildPayload(payload: data.payloadWeights),
             ImageGallery(images: data.images)
           ],

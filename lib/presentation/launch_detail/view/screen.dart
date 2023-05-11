@@ -2,12 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:spacex/model/launch_model.dart';
 import 'package:spacex/extension/date.dart';
+import 'package:spacex/model/launch_model.dart';
 import 'package:spacex/routes/path.dart';
 
 class LaunchDetailScreen extends StatefulWidget {
-  const LaunchDetailScreen({super.key});
+  final LaunchModel launchDetail;
+  const LaunchDetailScreen({super.key, required this.launchDetail});
 
   @override
   State<StatefulWidget> createState() {
@@ -16,6 +17,8 @@ class LaunchDetailScreen extends StatefulWidget {
 }
 
 class _State extends State<LaunchDetailScreen> {
+  LaunchModel get args => widget.launchDetail;
+
   _getLaunchStatus(bool? success) {
     if (success == null) return 'Unknown';
     return success ? 'Success' : 'Failed';
@@ -45,7 +48,7 @@ class _State extends State<LaunchDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var args = ModalRoute.of(context)?.settings.arguments as LaunchModel;
+
 
     return Scaffold(
       backgroundColor: const Color(0xFF01051A),

@@ -7,11 +7,9 @@ abstract class RocketEvent extends Equatable {
 }
 
 class LoadRocketEvent extends RocketEvent {
-  final String id;
-
-  const LoadRocketEvent(this.id);
+  const LoadRocketEvent();
 
   @override
-  List<Object?> get props => [id];
+  List<Object?> get props => [];
 
 }
