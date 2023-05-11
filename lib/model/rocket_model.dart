@@ -19,6 +19,7 @@ class RocketModel {
     var landingLeg = RocketLandingLeg.fromJson(json['landing_legs']);
     var payloadWeights =
         RocketPayloadWeightModel.parseList(json['payload_weights']);
+    var costPerLaunch = json['cost_per_launch'];
 
     return RocketModel(
         id: json['id'],
@@ -30,7 +31,7 @@ class RocketModel {
         images: List<String>.from(json['flickr_images'] ?? []),
         name: json['name'],
         company: json['company'],
-        costPerLaunch: json['costPerLaunch'],
+        costPerLaunch: costPerLaunch,
         country: json['country'],
         description: json['description']);
   }
