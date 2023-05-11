@@ -1,29 +1,16 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:spacex/model/launch_pad_model.dart';
 
-@immutable
-abstract class LaunchPadState extends Equatable {}
+import '../../shared/http_status.dart';
 
-class LaunchPadLoadingState extends LaunchPadState {
-  @override
-  List<Object?> get props => [];
-}
-
-class LaunchPadLoadedState extends LaunchPadState {
-  final LaunchPadModel data;
-
-  LaunchPadLoadedState(this.data);
-
-  @override
-  List<Object?> get props => [data];
-}
-
-class LaunchPadErrorState extends LaunchPadState {
+class LaunchPadState extends Equatable {
+  final LaunchPadModel? data;
   final String error;
+  final HttpRequestStatus status;
 
-  LaunchPadErrorState(this.error);
+  const LaunchPadState(
+      {this.data, this.status = HttpRequestStatus.initial, this.error = ""});
 
   @override
-  List<Object?> get props => [error];
+  List<Object?> get props => [data, error, status];
 }

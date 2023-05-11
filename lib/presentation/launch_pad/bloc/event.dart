@@ -1,4 +1,3 @@
-
 import 'package:equatable/equatable.dart';
 
 abstract class LaunchPadEvent extends Equatable {
@@ -6,10 +5,8 @@ abstract class LaunchPadEvent extends Equatable {
 }
 
 class LoadLaunchPadEvent extends LaunchPadEvent {
-  final String id;
-
-  const LoadLaunchPadEvent(this.id);
+  const LoadLaunchPadEvent();
 
   @override
-  List<Object?> get props => [id];
+  List<Object?> get props => [];
 }

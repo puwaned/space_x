@@ -27,7 +27,6 @@ class LaunchBloc extends Bloc<LaunchEvent, LaunchState> {
 
       try {
         final data = await _repo.getAll(event.filter);
-        print('fetch success');
         emit(LaunchState(
             status: LaunchStatus.success, data: data, filter: event.filter));
       } catch (err) {

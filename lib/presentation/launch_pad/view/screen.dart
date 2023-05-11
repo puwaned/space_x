@@ -7,6 +7,7 @@ import 'package:spacex/presentation/launch_pad/bloc/state.dart';
 import 'package:spacex/presentation/shared/gallery.dart';
 
 import '../../../model/launch_pad_model.dart';
+import '../../shared/http_status.dart';
 
 class LaunchPadScreen extends StatefulWidget {
   const LaunchPadScreen({super.key});
@@ -27,8 +28,7 @@ class _State extends State<LaunchPadScreen> {
   }
 
   _initLoadEvent() {
-    var id = ModalRoute.of(context)?.settings.arguments as String;
-    context.read<LaunchPadBloc>().add(LoadLaunchPadEvent(id));
+    context.read<LaunchPadBloc>().add(const LoadLaunchPadEvent());
   }
 
   @override
@@ -41,24 +41,23 @@ class _State extends State<LaunchPadScreen> {
       ),
       body:
           BlocBuilder<LaunchPadBloc, LaunchPadState>(builder: (context, state) {
-        if (state is LaunchPadLoadingState) {
-          return const Center(
-            child: CupertinoActivityIndicator(
-              color: Colors.white,
-            ),
-          );
+        switch (state.status) {
+          case HttpRequestStatus.initial:
+          case HttpRequestStatus.loading:
+            return const Center(
+              child: CupertinoActivityIndicator(
+                color: Colors.white,
+              ),
+            );
+          case HttpRequestStatus.failed:
+            return Center(
+              child: Text(state.error),
+            );
+          case HttpRequestStatus.success:
+            return LaunchPadDetail(
+              data: state.data!,
+            );
         }
-        if (state is LaunchPadErrorState) {
-          return Center(
-            child: Text(state.error),
-          );
-        }
-        if (state is LaunchPadLoadedState) {
-          return LaunchPadDetail(
-            data: state.data,
-          );
-        }
-        return Container();
       }),
     );
   }
