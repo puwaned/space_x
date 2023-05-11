@@ -7,6 +7,17 @@ class PaginationModel<T> {
   final bool hasNextPage;
   final int? nextPage;
 
+  factory PaginationModel.empty() {
+    return PaginationModel(
+        docs: [],
+        hasNextPage: false,
+        hasPrevPage: false,
+        limit: 0,
+        nextPage: null,
+        page: 1,
+        totalDocs: 0);
+  }
+
   factory PaginationModel.fromJson(Map<String, dynamic> json, List<T> docs) {
     return PaginationModel(
         docs: docs,

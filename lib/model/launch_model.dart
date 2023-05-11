@@ -8,6 +8,10 @@ class LaunchFilter {
   LaunchFilter(
       {required this.page, this.sortName, this.sortFireDate, this.search});
 
+  factory LaunchFilter.empty() {
+    return LaunchFilter(page: 1, search: "", sortName: 0, sortFireDate: 0);
+  }
+
   LaunchFilter copyWith(
       {int? page, String? search, int? sortName, int? sortFireDate}) {
     return LaunchFilter(

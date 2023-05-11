@@ -1,32 +1,57 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:spacex/model/launch_model.dart';
+import 'package:spacex/model/share_model.dart';
 import 'package:spacex/presentation/launch/bloc/event.dart';
 import 'package:spacex/presentation/launch/bloc/state.dart';
 
 import '../../../repo/launch_repo.dart';
 
+final prefilter = LaunchFilter.empty();
+final preData = PaginationModel<LaunchModel>.empty();
+
 class LaunchBloc extends Bloc<LaunchEvent, LaunchState> {
   final LaunchRepository _repo;
 
-  LaunchBloc(this._repo) : super(LaunchLoadingState()) {
+  LaunchBloc(this._repo)
+      : super(LaunchState(
+            status: LaunchStatus.initial,
+            data: preData,
+            filter: prefilter,
+            error: "")) {
     on<LoadLaunchEvent>((event, emit) async {
-      emit(LaunchLoadingState());
+      emit(LaunchState(
+          status: LaunchStatus.loading,
+          filter: event.filter,
+          data: preData,
+          error: ""));
+
       try {
-        final list = await _repo.getAll(event.filter);
-        emit(LaunchLoadedState(list, event.filter));
+        final data = await _repo.getAll(event.filter);
+        print('fetch success');
+        emit(LaunchState(
+            status: LaunchStatus.success, data: data, filter: event.filter));
       } catch (err) {
-        emit(LaunchErrorState(err.toString(), event.filter));
+        emit(LaunchState(
+            status: LaunchStatus.failed,
+            error: err.toString(),
+            data: preData,
+            filter: event.filter));
       }
     });
 
-    on<LoadMoreLaunchEvent> ((event, emit) async {
+    on<LoadMoreLaunchEvent>((event, emit) async {
       try {
         var prev = event.prevDocs;
-        final list = await _repo.getAll(event.filter);
-        list.docs = [...prev, ...list.docs];
-        emit(LaunchLoadedState(list, event.filter));
-      }
-      catch (err) {
-
+        final data = await _repo.getAll(event.filter);
+        data.docs = [...prev, ...data.docs];
+        emit(LaunchState(
+            status: LaunchStatus.success, data: data, filter: event.filter));
+      } catch (err) {
+        emit(LaunchState(
+            status: LaunchStatus.failed,
+            error: err.toString(),
+            data: preData,
+            filter: event.filter));
       }
     });
   }

@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:spacex/presentation/launch/bloc/bloc.dart';
-import 'package:spacex/presentation/launch/cubit/cubit.dart';
 import 'package:spacex/presentation/launch_pad/bloc/bloc.dart';
 import 'package:spacex/presentation/rocket/bloc/bloc.dart';
 import 'package:spacex/repo/launch_pad_repo.dart';
@@ -38,7 +37,6 @@ class RootApp extends StatelessWidget {
         child: MultiBlocProvider(
             providers: [
               BlocProvider<LaunchBloc>(create: (ctx) => LaunchBloc(launchRepo)),
-              BlocProvider<LaunchCubit>(create: (ctx) => LaunchCubit()),
               BlocProvider<LaunchPadBloc>(
                   create: (ctx) => LaunchPadBloc(launchPadRepo)),
               BlocProvider<RocketBloc>(create: (ctx) => RocketBloc(rocketRepo))

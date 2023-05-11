@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spacex/presentation/launch/bloc/bloc.dart';
 import 'package:spacex/presentation/launch/bloc/event.dart';
-import 'package:spacex/presentation/launch/cubit/cubit.dart';
 import 'package:spacex/model/launch_model.dart';
 import 'package:spacex/model/share_model.dart';
 import 'package:spacex/extension/date.dart';
@@ -35,18 +34,14 @@ class _State extends State<LaunchList> {
 
   _initController() {
     var launchBloc = context.read<LaunchBloc>();
-    var launchCubit = context.read<LaunchCubit>();
+    var filter = launchBloc.state.filter;
     _controller = ScrollController()
       ..addListener(() {
         var fetchMoreArea = _controller.position.maxScrollExtent;
         if (_controller.position.pixels >= fetchMoreArea &&
             launch.nextPage != null) {
-          var filter = LaunchFilter(
-              page: launchCubit.state.page + 1,
-              search: launchCubit.state.search,
-              sortName: launchCubit.state.sortName,
-              sortFireDate: launchCubit.state.sortFireDate);
-          launchBloc.add(LoadMoreLaunchEvent(filter, launch.docs));
+          var next = filter.copyWith(page: filter.page + 1);
+          launchBloc.add(LoadMoreLaunchEvent(next, launch.docs));
         }
       });
   }

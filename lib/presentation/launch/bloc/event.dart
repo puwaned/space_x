@@ -10,10 +10,10 @@ abstract class LaunchEvent extends Equatable {
 class LoadLaunchEvent extends LaunchEvent {
   final LaunchFilter filter;
 
-  const LoadLaunchEvent(this.filter);
+  const LoadLaunchEvent({required this.filter});
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [filter];
 }
 
 class LoadMoreLaunchEvent extends LaunchEvent {

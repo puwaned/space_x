@@ -1,50 +1,33 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:spacex/model/launch_model.dart';
 import 'package:spacex/model/share_model.dart';
 
-@immutable
-abstract class LaunchState extends Equatable {}
+enum LaunchStatus { initial, loading, success, failed }
 
-class LaunchLoadingState extends LaunchState {
-  @override
-  List<Object?> get props => [];
-}
-
-class LaunchLoadedState extends LaunchState {
+class LaunchState extends Equatable {
   final PaginationModel<LaunchModel> data;
   final LaunchFilter filter;
-
-  LaunchLoadedState(this.data, this.filter);
-
-  @override
-  List<Object?> get props => [data, filter];
-}
-
-class LaunchErrorState extends LaunchState {
+  final LaunchStatus status;
   final String error;
-  final LaunchFilter filter;
 
-  LaunchErrorState(this.error, this.filter);
+  const LaunchState(
+      {required this.data,
+      required this.filter,
+      required this.status,
+      this.error = ""});
+
+  LaunchState copyWith(
+      {LaunchStatus? status,
+      LaunchFilter? filter,
+      String? error,
+      PaginationModel<LaunchModel>? data}) {
+    return LaunchState(
+        filter: filter ?? this.filter,
+        status: status ?? this.status,
+        error: error ?? this.error,
+        data: data ?? this.data);
+  }
 
   @override
-  List<Object?> get props => [error, filter];
+  List<Object?> get props => [filter, status, error, data];
 }
-
-class LaunchLoadMoreErrorState extends LaunchState {
-  final String error;
-  final LaunchFilter filter;
-
-  LaunchLoadMoreErrorState(this.error, this.filter);
-
-  @override
-  List<Object?> get props => [error, filter];
-}
-// class LaunchLoadMoreState extends LaunchState {
-//   final bool loading;
-//
-//   LaunchLoadMoreState(this.loading);
-//
-//   @override
-//   List<Object?> get props => [loading];
-// }

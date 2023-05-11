@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spacex/presentation/launch/bloc/bloc.dart';
 import 'package:spacex/presentation/launch/bloc/event.dart';
-import 'package:spacex/presentation/launch/cubit/cubit.dart';
 
 import '../bloc/state.dart';
 import 'drawer.dart';
@@ -34,24 +33,21 @@ class _State extends State<LaunchScreen> {
 
   _initLaunch() {
     var launchBloc = context.read<LaunchBloc>();
-    var launchCubit = context.read<LaunchCubit>();
-    launchBloc.add(LoadLaunchEvent(launchCubit.state));
+    launchBloc.add(LoadLaunchEvent(filter: launchBloc.state.filter));
   }
 
   _initSearchController() {
-    var launchBloc = context.read<LaunchBloc>();
-    var launchCubit = context.read<LaunchCubit>();
     _searchController = TextEditingController()
       ..addListener(() {
         var text = _searchController.text;
         _timer?.cancel();
         _timer = Timer(const Duration(milliseconds: 500), () {
+          var launchBloc = context.read<LaunchBloc>();
+          var filter = launchBloc.state.filter;
           //prevent fetch when first open text_field
-          if (launchCubit.state.search == text) return;
-
-          var next = launchCubit.state.copyWith(page: 1, search: text);
-          launchCubit.change(next);
-          launchBloc.add(LoadLaunchEvent(next));
+          if (filter.search == text) return;
+          var next = filter.copyWith(page: 1, search: text);
+          launchBloc.add(LoadLaunchEvent(filter: next));
         });
       });
   }
@@ -102,38 +98,29 @@ class _State extends State<LaunchScreen> {
 
   _body() {
     return BlocConsumer<LaunchBloc, LaunchState>(builder: (context, state) {
-      if (state is LaunchLoadingState) {
-        return const Center(
-          child: Hero(
-              tag: 'splash_screen',
-              child: CupertinoActivityIndicator(
-                color: Colors.white,
-              )),
-        );
+      switch (state.status) {
+        case LaunchStatus.loading:
+        case LaunchStatus.initial:
+          return const Center(
+            child: Hero(
+                tag: 'splash_screen',
+                child: CupertinoActivityIndicator(
+                  color: Colors.white,
+                )),
+          );
+        case LaunchStatus.success:
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: LaunchList(
+              launch: state.data,
+            ),
+          );
+        case LaunchStatus.failed:
+          return Center(
+            child: Text(state.error),
+          );
       }
-      if (state is LaunchErrorState) {
-        return Center(
-          child: Text(state.error),
-        );
-      }
-      if (state is LaunchLoadedState) {
-        return Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: LaunchList(
-            launch: state.data,
-          ),
-        );
-      }
-
-      return Container();
     }, listener: (context, state) {
-      if (state is LaunchLoadMoreErrorState) {
-        final snackBar = SnackBar(
-          content: Text(state.error),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        return;
-      }
       return;
     });
   }
