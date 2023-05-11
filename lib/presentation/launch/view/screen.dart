@@ -62,7 +62,7 @@ class _State extends State<LaunchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         drawerEnableOpenDragGesture: false,
-        endDrawer: HomeDrawer(),
+        endDrawer: const HomeDrawer(),
         backgroundColor: const Color(0xFF01051A),
         appBar: AppBar(
           elevation: 0,

@@ -62,7 +62,7 @@ void main() {
       // final carousel = find.byKey(const Key('launch_detail_carousel_slider'));
       // await tester.drag(finder, offset);
 
-      await Future.delayed(Duration(seconds: 2));
+      // await Future.delayed(Duration(seconds: 2));
     });
   });
 }

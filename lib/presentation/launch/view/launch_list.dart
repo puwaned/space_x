@@ -204,7 +204,7 @@ class LaunchRocketCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(fontSize: 14),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   Row(
@@ -255,7 +255,7 @@ class LaunchRocketCard extends StatelessWidget {
                         ),
                         Text(
                           fireDate,
-                          style: TextStyle(fontSize: 16),
+                          style: const TextStyle(fontSize: 16),
                         )
                       ],
                     ),
