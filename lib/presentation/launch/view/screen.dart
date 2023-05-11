@@ -76,6 +76,7 @@ class _State extends State<LaunchScreen> {
           title: const Text('Space X'),
           actions: [
             AnimSearchBar(
+              key: const Key('search_bar'),
               autoFocus: true,
               width: 320,
               rtl: true,

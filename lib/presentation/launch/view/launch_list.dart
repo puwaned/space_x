@@ -62,6 +62,7 @@ class _State extends State<LaunchList> {
     var list = launch.docs;
 
     return ListView.separated(
+        key: const Key('launch_list_view'),
         controller: _controller,
         itemBuilder: (context, index) {
           var item = list[index];
@@ -74,6 +75,7 @@ class _State extends State<LaunchList> {
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 20),
                   child: CupertinoActivityIndicator(
+                    key: Key('launch_list_view_load_more'),
                     radius: 16,
                     color: Colors.white,
                   ),
@@ -83,11 +85,12 @@ class _State extends State<LaunchList> {
           }
 
           return LaunchRocketCard(
+            key: const Key('launch_rocket_card'),
             item: item,
           );
         },
         separatorBuilder: (context, index) {
-          return SizedBox(
+          return const SizedBox(
             height: 20,
           );
         },

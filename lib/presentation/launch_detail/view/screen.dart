@@ -241,6 +241,7 @@ class ImageCarousel extends StatelessWidget {
     }
 
     return CarouselSlider(
+        key: const Key('launch_detail_carousel_slider'),
         items: images.asMap().entries.map((e) {
           var index = e.key;
           var value = e.value;
@@ -249,7 +250,10 @@ class ImageCarousel extends StatelessWidget {
             return Hero(
               tag: '${id}_preview_image',
               child: CachedNetworkImage(
-                  height: double.infinity, fit: BoxFit.cover, imageUrl: value),
+                  key: Key('image_preview_$index'),
+                  height: double.infinity,
+                  fit: BoxFit.cover,
+                  imageUrl: value),
             );
           }
 
