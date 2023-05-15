@@ -1,4 +1,6 @@
-class RocketModel {
+import 'package:equatable/equatable.dart';
+
+class RocketModel extends Equatable {
   final String id;
   final List<String> images;
   final String name;
@@ -36,7 +38,7 @@ class RocketModel {
         description: json['description']);
   }
 
-  RocketModel(
+  const RocketModel(
       {required this.id,
       required this.wikipedia,
       required this.images,
@@ -49,6 +51,9 @@ class RocketModel {
       required this.landingLeg,
       required this.mass,
       required this.payloadWeights});
+
+  @override
+  List<Object?> get props => [];
 }
 
 class RocketHeightModel {

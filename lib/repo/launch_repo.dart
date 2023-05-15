@@ -3,25 +3,29 @@ import 'package:spacex/environment.dart';
 import 'package:spacex/model/launch_model.dart';
 import 'package:spacex/model/share_model.dart';
 
-const int limit = 20;
+const int limit = 10;
+
+abstract class AbstractLaunchRepository {
+
+}
 
 class LaunchRepository {
   Dio dio;
 
   LaunchRepository({required this.dio});
 
-  Future<PaginationModel<LaunchModel>> getAll(LaunchFilter filter) async {
+  Future<PaginationModel<LaunchModel>> getAll([LaunchFilter? filter]) async {
     var res = await dio.post('/v5/launches/query', data: {
       "options": {
         'limit': limit,
-        'page': filter.page,
+        'page': filter?.page ?? 1,
         "sort": {
-          "static_fire_date": filter.sortFireDate == 0 ? 'asc' : 'desc',
-          "name": filter.sortName == 0 ? 'asc' : 'desc'
+          "static_fire_date": (filter?.sortFireDate ?? 0) == 0 ? 'asc' : 'desc',
+          "name": (filter?.sortName ?? 0) == 0 ? 'asc' : 'desc'
         }
       },
       "query": {
-        "name": {"\$regex": filter.search ?? "", "\$options": "i"}
+        "name": {"\$regex": filter?.search ?? "", "\$options": "i"}
       },
     });
     if (res.statusCode == 200) {
