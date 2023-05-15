@@ -1,4 +1,6 @@
-class LaunchPadModel {
+import 'package:equatable/equatable.dart';
+
+class LaunchPadModel extends Equatable {
   final String id;
   final String name;
   final String region;
@@ -28,7 +30,7 @@ class LaunchPadModel {
         region: json['region']);
   }
 
-  LaunchPadModel(
+  const LaunchPadModel(
       {required this.images,
       required this.name,
       required this.id,
@@ -40,4 +42,7 @@ class LaunchPadModel {
       required this.locality,
       required this.longitude,
       required this.region});
+
+  @override
+  List<Object?> get props => [];
 }

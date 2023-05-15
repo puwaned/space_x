@@ -1,9 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:spacex/environment.dart';
-import 'package:spacex/model/rocket_model.dart';
-import 'package:spacex/repo/rocket_repo.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
+import 'package:spacex/environment.dart';
+import 'package:spacex/model/launch_pad_model.dart';
+import 'package:spacex/repo/launch_pad_repo.dart';
+
 import '../common.dart';
 
 main() {
@@ -20,33 +21,33 @@ main() {
     adapter = DioAdapter(dio: dio);
   });
 
-  test('rocket.get-one.success', () async {
-    const id = '5e9d0d95eda69973a809d1ec';
-    const route = '/v4/rockets/$id';
+  test('launch-pad.get-one.success', () async {
+    const id = '5e9e4501f509094ba4566f84';
+    const route = '/v4/launchpads/$id';
 
     adapter.onGet(route, (server) {
-      return server.reply(200, exampleJsonRocket,
+      return server.reply(200, exampleJsonLaunchPad,
           delay: const Duration(seconds: 1));
     });
 
-    final service = RocketRepository(dio: dio);
-    final expectRes = RocketModel.fromJson(exampleJsonRocket);
+    final service = LaunchPadRepository(dio: dio);
+    final expectRes = LaunchPadModel.fromJson(exampleJsonLaunchPad);
     final actualRes = await service.getOne(id);
 
     expect(actualRes, equals(expectRes));
   });
 
-  test('rocket.get-one.error', () async {
-    const id = '5e9d0d95eda69973a809d1ec';
-    const route = '/v4/rockets/$id';
+  test('launch-pad.get-one.error', () async {
+    const id = '5e9e4501f509094ba4566f84';
+    const route = '/v4/launchpads/$id';
     const errorCode = 500;
 
     adapter.onGet(route, (server) {
-      return server.reply(errorCode, exampleJsonRocket,
+      return server.reply(errorCode, exampleJsonLaunchPad,
           delay: const Duration(seconds: 1));
     });
 
-    final service = RocketRepository(dio: dio);
+    final service = LaunchPadRepository(dio: dio);
 
     expect(() async => await service.getOne(id), throwsA(predicate((e) {
       return e is Exception &&

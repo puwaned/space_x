@@ -1,4 +1,6 @@
-class PaginationModel<T> {
+import 'package:equatable/equatable.dart';
+
+class PaginationModel<T> extends Equatable {
   List<T> docs;
   final int totalDocs;
   final int limit;
@@ -37,4 +39,7 @@ class PaginationModel<T> {
       required this.nextPage,
       required this.page,
       required this.totalDocs});
+
+  @override
+  List<Object?> get props => [];
 }

@@ -74,7 +74,9 @@ final exampleJsonRocket = {
 
 final exampleJsonLaunchPad = {
   "images": {
-    "large": ["https://i.imgur.com/9oEMXwa.png"]
+    "large": [
+      "https://i.imgur.com/9oEMXwa.png"
+    ]
   },
   "name": "CCSFS SLC 40",
   "full_name": "Cape Canaveral Space Force Station Space Launch Complex 40",
@@ -84,7 +86,9 @@ final exampleJsonLaunchPad = {
   "longitude": -80.577366,
   "launch_attempts": 99,
   "launch_successes": 97,
-  "rockets": ["5e9d0d95eda69973a809d1ec"],
+  "rockets": [
+    "5e9d0d95eda69973a809d1ec"
+  ],
   "timezone": "America/New_York",
   "launches": [
     "5eb87cddffd86e000604b32f",
@@ -188,8 +192,7 @@ final exampleJsonLaunchPad = {
     "63161339ffc78f3b8567070c"
   ],
   "status": "active",
-  "details":
-      "SpaceX's primary Falcon 9 pad, where all east coast Falcon 9s launched prior to the AMOS-6 anomaly. Previously used alongside SLC-41 to launch Titan rockets for the US Air Force, the pad was heavily damaged by the AMOS-6 anomaly in September 2016. It returned to flight with CRS-13 on December 15, 2017, boasting an upgraded throwback-style Transporter-Erector modeled after that at LC-39A.",
+  "details": "SpaceX's primary Falcon 9 pad, where all east coast Falcon 9s launched prior to the AMOS-6 anomaly. Previously used alongside SLC-41 to launch Titan rockets for the US Air Force, the pad was heavily damaged by the AMOS-6 anomaly in September 2016. It returned to flight with CRS-13 on December 15, 2017, boasting an upgraded throwback-style Transporter-Erector modeled after that at LC-39A.",
   "id": "5e9e4501f509094ba4566f84"
 };
 
