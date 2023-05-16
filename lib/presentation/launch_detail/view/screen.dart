@@ -48,8 +48,6 @@ class _State extends State<LaunchDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       backgroundColor: const Color(0xFF01051A),
       body: CustomScrollView(
@@ -120,9 +118,10 @@ class _State extends State<LaunchDetailScreen> {
                                   arguments: args.launchPad);
                             }
                           : null,
-                      unique: 'view_lunch_pad_${args.launchPad}'),
+                      unique: 'view_launch_pad'),
                   _buildWidgetRecord(
                       label: 'Rocket',
+                      unique: 'view_rocket',
                       onTap: args.rocket != null
                           ? () {
                               Navigator.of(context).pushNamed(
@@ -164,7 +163,7 @@ class _State extends State<LaunchDetailScreen> {
   }
 
   _buildWidgetRecord(
-      {required String label, void Function()? onTap, String? unique}) {
+      {required String label, void Function()? onTap, required String unique}) {
     return Column(
       children: [
         Divider(
@@ -190,7 +189,8 @@ class _State extends State<LaunchDetailScreen> {
                             borderRadius: BorderRadius.circular(50),
                             radius: 30,
                             onTap: onTap,
-                            child: const Icon(
+                            child: Icon(
+                              key: Key(unique),
                               Icons.remove_red_eye,
                               color: Colors.white,
                             ),

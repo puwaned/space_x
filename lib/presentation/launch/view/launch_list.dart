@@ -214,6 +214,7 @@ class LaunchRocketCard extends StatelessWidget {
                         style: TextStyle(fontSize: 12),
                       ),
                       Container(
+
                         padding: const EdgeInsets.all(1),
                         decoration: const BoxDecoration(
                           color: Colors.white,
@@ -222,6 +223,7 @@ class LaunchRocketCard extends StatelessWidget {
                         child: Container(
                           height: 11,
                           width: 11,
+                          key: const Key('launch_card_status'),
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: _getDotColor(item.success)),
