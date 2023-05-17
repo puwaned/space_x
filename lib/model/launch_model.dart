@@ -1,4 +1,3 @@
-
 class LaunchFilter {
   final int page;
   String? search;
@@ -35,6 +34,19 @@ class LaunchModel {
 
   static List<LaunchModel> parseList(List<dynamic> list) {
     return list.map((e) => LaunchModel.fromJson(e)).toList();
+  }
+
+  copyWith({bool? success}) {
+    return LaunchModel(
+        links: links,
+        id: id,
+        details: details,
+        name: name,
+        fireDate: fireDate,
+        success: success,
+        crews: crews,
+        launchPad: launchPad,
+        rocket: rocket);
   }
 
   factory LaunchModel.fromJson(Map<String, dynamic> json) {

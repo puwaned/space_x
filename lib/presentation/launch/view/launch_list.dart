@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +6,6 @@ import 'package:spacex/presentation/launch/bloc/event.dart';
 import 'package:spacex/model/launch_model.dart';
 import 'package:spacex/model/share_model.dart';
 import 'package:spacex/extension/date.dart';
-import 'package:spacex/presentation/shared/flow_delegate.dart';
 import 'package:spacex/routes/path.dart';
 
 class LaunchList extends StatefulWidget {
@@ -122,7 +120,6 @@ class _State extends State<LaunchList> {
 
 class LaunchRocketCard extends StatelessWidget {
   final LaunchModel item;
-  final GlobalKey _backgroundImageKey = GlobalKey();
 
   LaunchRocketCard({super.key, required this.item});
 
@@ -146,20 +143,24 @@ class LaunchRocketCard extends StatelessWidget {
       );
     }
 
-    return Flow(
-      delegate: ParallaxFlowDelegate(
-        scrollable: Scrollable.of(context),
-        listItemContext: context,
-        backgroundImageKey: _backgroundImageKey,
-      ),
-      children: [
-        CachedNetworkImage(
-          key: _backgroundImageKey,
-          fit: BoxFit.fill,
-          imageUrl: images.first,
-        )
-      ],
+    return Image.network(
+      images.first,
+      fit: BoxFit.fill,
     );
+    // return Flow(
+    //   delegate: ParallaxFlowDelegate(
+    //     scrollable: Scrollable.of(context),
+    //     listItemContext: context,
+    //     backgroundImageKey: key,
+    //   ),
+    //   children: [
+    //     CachedNetworkImage(
+    //       key: key,
+    //       fit: BoxFit.fill,
+    //       imageUrl: images.first,
+    //     )
+    //   ],
+    // );
   }
 
   @override
@@ -214,7 +215,6 @@ class LaunchRocketCard extends StatelessWidget {
                         style: TextStyle(fontSize: 12),
                       ),
                       Container(
-
                         padding: const EdgeInsets.all(1),
                         decoration: const BoxDecoration(
                           color: Colors.white,

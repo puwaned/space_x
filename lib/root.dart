@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:spacex/repo/launch_pad_repo.dart';
 import 'package:spacex/repo/launch_repo.dart';
@@ -35,10 +34,11 @@ class RootApp extends StatelessWidget {
           navigatorKey: _navigatorKey,
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-              textTheme: GoogleFonts.aBeeZeeTextTheme(const TextTheme(
+            fontFamily: 'aBeeZee',
+              textTheme: const TextTheme(
                   bodySmall: TextStyle(color: Colors.white),
                   bodyMedium: TextStyle(color: Colors.white),
-                  bodyLarge: TextStyle(color: Colors.white)))),
+                  bodyLarge: TextStyle(color: Colors.white))),
           builder: (context, child) {
             return ResponsiveBreakpoints.builder(
               child: AppLoadingScreen(child: child!),

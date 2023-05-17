@@ -21,7 +21,6 @@ dependencies:
   equatable: ^2.0.5
   dio: ^5.1.1
   responsive_framework: ^1.0.0
-  google_fonts: ^4.0.4
   anim_search_bar: ^2.0.3
   chips_choice: ^3.0.0
   cached_network_image: ^3.2.3
@@ -40,11 +39,16 @@ dev_dependencies:
   mockito: ^5.4.0
   build_runner: ^2.3.3
   bloc_test: ^9.1.1
+  network_image_mock: ^2.0.1
 
 flutter:
   uses-material-design: true
   assets:
     - assets/images/
+  fonts:
+    - family: aBeeZee
+      fonts:
+        - asset: assets/fonts/ABeeZee-Regular.ttf
 
 flutter_launcher_icons:
   android: "launcher_icon"
