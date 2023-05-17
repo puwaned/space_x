@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:network_image_mock/network_image_mock.dart';
 import 'package:spacex/extension/date.dart';
 import 'package:spacex/model/launch_model.dart';
 import 'package:spacex/presentation/launch/view/launch_list.dart';
@@ -14,17 +15,17 @@ main() {
   });
 
   testWidgets('Display launch rocket card', (tester) async {
-    await tester.pumpWidget(MaterialApp(
-      home: Scaffold(
-        //because of flow animation that make it need scroll parent
-        body: SingleChildScrollView(
-          child: LaunchRocketCard(
-            key: Key(launchItem.id),
-            item: launchItem,
+    await mockNetworkImagesFor(() async => await tester.pumpWidget(MaterialApp(
+          home: Scaffold(
+            //because of flow animation that make it need scroll parent
+            body: SingleChildScrollView(
+              child: LaunchRocketCard(
+                key: Key(launchItem.id),
+                item: launchItem,
+              ),
+            ),
           ),
-        ),
-      ),
-    ));
+        )));
 
     final cardFinder = find.byType(LaunchRocketCard);
     expect(cardFinder, findsOneWidget);
